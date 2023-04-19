@@ -70,8 +70,9 @@ create table admins(
 create table managers(
     id integer primary key,
     current_task_id integer default null, -- ref
-    user_id integer default null
-
+    user_id integer default null,
+    foreign key(current_task_id) references tasks(id),
+    foreign key(user_id) references users(id)
 );
 
 create table tasks(
@@ -87,7 +88,9 @@ create table tasks(
 
 create table tasks_users(
     id integer primary key,
-    id_user integer, --ref
-    id_task integer, --ref
-    completion_date integer
+    user_id integer,
+    task_id integer,
+    completion_date integer,
+    foreign key(task_id) references tasks(id),
+    foreign key(user_id) references users(id)
 );

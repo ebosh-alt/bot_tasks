@@ -1,30 +1,10 @@
 from aiogram import types
-from yookassa import Payment, Configuration
+from jinja2 import Environment, PackageLoader, select_autoescape
 
-Configuration.account_id = '980889'
-Configuration.secret_key = 'live_JB-sjh_-FPp_2Rl5QeX5Rlm6lwqarahXnk4YAbZCOnQ'
-
-
-def create_pay(user_id: str, price: int) -> tuple:
-    payment = Payment.create({
-        "amount": {
-            "value": price,
-            "currency": "RUB"
-        },
-        "confirmation": {
-            "type": "redirect",
-            "return_url": "https://t.me/design_ai_skillbot"
-
-        },
-        "capture": True,
-        "description": user_id,
-        "receipt": {"customer": {"email": "evsevm@gmail.com"}}
-    })
-    # print(payment.amount.__dict__)
-    # print(payment.recipient.__dict__)
-    # print(payment.confirmation.__dict__)
-    # print(payment.confirmation.confirmation_url, payment.id)
-    return payment.confirmation.confirmation_url, payment.id
+env = Environment(
+    loader=PackageLoader(package_name='main', package_path=""),
+    autoescape=select_autoescape(['html', 'xml'])
+)
 
 
 def create_keyboard(name_buttons: list, ) -> types.ReplyKeyboardMarkup:
@@ -58,5 +38,10 @@ def inl_create_keyboard(buttons: list, ):
     return keyboard
 
 
+def get_mess(path: str, **kwargs):
+    tmpl = env.get_template(path)
+    return tmpl.render()
+
+
 if __name__ == "__main__":
-    print(create_pay("55", 2))
+    print(get_mess("templates/about_by_admin"))
