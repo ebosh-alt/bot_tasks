@@ -1,0 +1,25 @@
+DEBUG 2023-04-26 16:07:17,906 Using proactor: IocpProactor
+DEBUG 2023-04-26 16:07:17,909 Make request: "getMe" with data: "{}" and files "None"
+DEBUG 2023-04-26 16:07:18,468 Response for getMe: [200] "'{"ok":true,"result":{"id":6145466289,"is_bot":true,"first_name":"\\u0411\\u043e\\u0442 \\"\\u0417\\u0410\\u0414\\u0410\\u041d\\u0418\\u042f\\"","username":"one_tasks_bot","can_join_groups":true,"can_read_all_group_messages":false,"supports_inline_queries":false}}'"
+INFO 2023-04-26 16:07:18,468 Bot: Бот "ЗАДАНИЯ" [@one_tasks_bot]
+DEBUG 2023-04-26 16:07:18,469 Make request: "getWebhookInfo" with data: "{}" and files "None"
+DEBUG 2023-04-26 16:07:18,558 Response for getWebhookInfo: [200] "'{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":0}}'"
+DEBUG 2023-04-26 16:07:18,559 Make request: "deleteWebhook" with data: "{'drop_pending_updates': True}" and files "None"
+DEBUG 2023-04-26 16:07:18,651 Response for deleteWebhook: [200] "'{"ok":true,"result":true,"description":"Webhook is already deleted"}'"
+WARNING 2023-04-26 16:07:18,651 Updates were skipped successfully.
+INFO 2023-04-26 16:07:18,652 Start polling.
+DEBUG 2023-04-26 16:07:18,652 Make request: "getWebhookInfo" with data: "{}" and files "None"
+DEBUG 2023-04-26 16:07:18,730 Response for getWebhookInfo: [200] "'{"ok":true,"result":{"url":"","has_custom_certificate":false,"pending_update_count":0}}'"
+DEBUG 2023-04-26 16:07:18,730 Make request: "getUpdates" with data: "{'timeout': 20}" and files "None"
+DEBUG 2023-04-26 16:07:31,466 Response for getUpdates: [200] "'{"ok":true,"result":[{"update_id":475177153,\n"message":{"message_id":326,"from":{"id":686171972,"is_bot":false,"first_name":"Nikita","last_name":"I","username":"Nikita_Ivvvv","language_code":"ru"},"chat":{"id":686171972,"first_name":"Nikita","last_name":"I","username":"Nikita_Ivvvv","type":"private"},"date":1682514450,"text":"/admin","entities":[{"offset":0,"length":6,"type":"bot_command"}]}}]}'"
+DEBUG 2023-04-26 16:07:31,467 Received 1 updates.
+DEBUG 2023-04-26 16:07:31,513 Make request: "deleteMessage" with data: "{'chat_id': 686171972, 'message_id': 326}" and files "None"
+DEBUG 2023-04-26 16:07:31,584 Make request: "getUpdates" with data: "{'offset': 475177154, 'timeout': 20}" and files "None"
+DEBUG 2023-04-26 16:07:31,770 Response for deleteMessage: [200] "'{"ok":true,"result":true}'"
+DEBUG 2023-04-26 16:07:31,789 Make request: "sendMessage" with data: "{'chat_id': 686171972, 'text': 'Вы вошли в админ панель!', 'reply_markup': '{"resize_keyboard": true, "one_time_keyboard": true, "inline_keyboard": [[{"text": "👥 Пользователи", "callback_data": "users"}]]}'}" and files "None"
+DEBUG 2023-04-26 16:07:32,284 Response for sendMessage: [200] "'{"ok":true,"result":{"message_id":327,"from":{"id":6145466289,"is_bot":true,"first_name":"\\u0411\\u043e\\u0442 \\"\\u0417\\u0410\\u0414\\u0410\\u041d\\u0418\\u042f\\"","username":"one_tasks_bot"},"chat":{"id":686171972,"first_name":"Nikita","last_name":"I","username":"Nikita_Ivvvv","type":"private"},"date":1682514451,"text":"\\u0412\\u044b \\u0432\\u043e\\u0448\\u043b\\u0438 \\u0432 \\u0430\\u0434\\u043c\\u0438\\u043d \\u043f\\u0430\\u043d\\u0435\\u043b\\u044c!","reply_markup":{"inline_keyboard":[[{"text":"\\ud83d\\udc65 \\u041f\\u043e\\u043b\\u044c\\u0437\\u043e\\u0432\\u0430\\u0442\\u0435\\u043b\\u0438","callback_data":"users"}]]}}}'"
+DEBUG 2023-04-26 16:07:33,748 Response for getUpdates: [200] "'{"ok":true,"result":[{"update_id":475177154,\n"callback_query":{"id":"2947086180044756181","from":{"id":686171972,"is_bot":false,"first_name":"Nikita","last_name":"I","username":"Nikita_Ivvvv","language_code":"ru"},"message":{"message_id":327,"from":{"id":6145466289,"is_bot":true,"first_name":"\\u0411\\u043e\\u0442 \\"\\u0417\\u0410\\u0414\\u0410\\u041d\\u0418\\u042f\\"","username":"one_tasks_bot"},"chat":{"id":686171972,"first_name":"Nikita","last_name":"I","username":"Nikita_Ivvvv","type":"private"},"date":1682514451,"text":"\\u0412\\u044b \\u0432\\u043e\\u0448\\u043b\\u0438 \\u0432 \\u0430\\u0434\\u043c\\u0438\\u043d \\u043f\\u0430\\u043d\\u0435\\u043b\\u044c!","reply_markup":{"inline_keyboard":[[{"text":"\\ud83d\\udc65 \\u041f\\u043e\\u043b\\u044c\\u0437\\u043e\\u0432\\u0430\\u0442\\u0435\\u043b\\u0438","callback_data":"users"}]]}},"chat_instance":"-3701679305386237948","data":"users"}}]}'"
+DEBUG 2023-04-26 16:07:33,749 Received 1 updates.
+DEBUG 2023-04-26 16:07:33,863 Make request: "getUpdates" with data: "{'offset': 475177155, 'timeout': 20}" and files "None"
+INFO 2023-04-26 16:07:46,226 Stop polling...
+WARNING 2023-04-26 16:07:46,227 Goodbye!

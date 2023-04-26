@@ -1,11 +1,6 @@
 from aiogram import types
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-env = Environment(
-    loader=PackageLoader(package_name='main', package_path=""),
-    autoescape=select_autoescape(['html', 'xml'])
-)
-
 
 def create_keyboard(name_buttons: list, ) -> types.ReplyKeyboardMarkup:
     keyboard = types.ReplyKeyboardMarkup(row_width=len(name_buttons), resize_keyboard=True, one_time_keyboard=True)
@@ -39,9 +34,15 @@ def inl_create_keyboard(buttons: list, ):
 
 
 def get_mess(path: str, **kwargs):
+    env = Environment(
+        loader=PackageLoader(package_name='main', package_path="", encoding="utf-8"),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
     tmpl = env.get_template(path)
-    return tmpl.render()
-
+    return tmpl.render(kwargs)
 
 if __name__ == "__main__":
-    print(get_mess("templates/about_by_admin"))
+    s = get_mess("templates/profile_user", firstname="s", patronymic="v", id=0,
+                 username="sas", lastname="sa", counrty="sa", document="sasc", withdrawal_account= "as",
+                 balance=100)
+    print(s)

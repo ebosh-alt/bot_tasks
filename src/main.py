@@ -7,8 +7,17 @@ import keyboards as kb
 from functions import get_mess
 
 
+@dp.message_handler(commands=["start"])
+async def start_admin(message: types.Message):
+    id = message.from_user.id
+    if id not in users:
+        users.add(User(id))
+        await bot.send_message(chat_id=id,
+                               text="hello world!")
+
+
 @dp.message_handler(commands=["admin"])
-async def start(message: types.Message):
+async def start_admin(message: types.Message):
     id = message.from_user.id
     if id not in admins:
         logging.debug(f"{id} not in admins")
@@ -43,11 +52,18 @@ async def message_admin(message: types.Message):
         else:
             username = message.text
             user = users.get_by_username(username)
-
-        await bot.edit_message_text(chat_id=id,
-                                    message_id=admin.bot_message_id,
-                                    text="as",
-                                    reply_markup=kb.NONE)
+        if user:
+            country = countries.get(user.country_id)
+            document = documents.get(user.country_id)
+            referral_boss = users.get_referral_boss(user.referral_boss_id)
+            mess = get_mess(path="templates/profile_user", lastname=user.lastname, firstname=user.firstname,
+                            patronymic=user.patronymic, id=user.id, username=user.username,  counrty=country,
+                            document=document, withdrawal_account=user.withdrawal_account, balance=user.balance,
+                            referral_link=user.referral_link, referral_boss=referral_boss)
+            await bot.edit_message_text(chat_id=id,
+                                        message_id=admin.bot_message_id,
+                                        text=mess,
+                                        reply_markup=kb.NONE)
 
 
 @dp.callback_query_handler(lambda call: call.from_user.id in admins)

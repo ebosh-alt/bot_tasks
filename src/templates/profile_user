@@ -1,0 +1,11 @@
+{{ firstname }} {{ patronymic }}
+🆔 id: {{id}}
+👤 username: @{{username}}
+📝 ФИО указанные в анкете: {{ lastname }} {{ firstname }} {{ patronymic }}
+✅ Дата регистрации: {{ date_registration }} в {{ time_registration }}
+🌍 Страна: {{ counrty }}
+📂 Документы: {{ document }}
+💳 Реквизиты выплат: {{withdrawal_account}}
+   Рефералльная ссылка: {{referral_link}}
+   Рефферальный босс: {{referral_boss}}
+💰Ваш баланс: {{balance}} руб

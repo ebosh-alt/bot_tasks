@@ -30,6 +30,7 @@ class User:
             self.flag: Flags = Flags(kwargs["flag"])
             self.bot_message_id: int = kwargs["bot_message_id"]
             self.delete_message_id: int = kwargs["delete_message_id"]
+            self.earnings_on_reff = kwargs["earnings_on_reff"]
 
         else:
             self.status: bool = True
@@ -54,6 +55,7 @@ class User:
             self.flag: Flags = Flags.NONE
             self.bot_message_id: int = 0
             self.delete_message_id: int = 0
+            self.earnings_on_reff: int = 0
 
     def __iter__(self):
         dict_class = self.__dict__
@@ -98,15 +100,27 @@ class Users(Sqlite3_Database):
                        count_verified_rejected=obj_tuple[20],
                        flag=Flags(obj_tuple[21]),
                        bot_message_id=obj_tuple[22],
-                       delete_message_id=obj_tuple[23]
+                       delete_message_id=obj_tuple[23],
+                       earnings_on_reff=obj_tuple[24]
                        )
             return obj
         return False
 
-    def get_by_username(self, username):
+    def get_by_username(self, username) -> User | bool:
         conn = self.sqlite_connect()
         curs = conn.cursor()
-        curs.execute(f'''SELECT * from {self.table_name} where username = {username}''')
+        curs.execute(f'''SELECT * from {self.table_name} where username = "{username}"''')
+        answer = curs.fetchone()
+        conn.close()
+        if answer:
+            return answer
+        else:
+            return False
+
+    def get_referral_boss(self, id: int) -> int:
+        conn = self.sqlite_connect()
+        curs = conn.cursor()
+        curs.execute(f'''SELECT username from {self.table_name} where id = {id}''')
         answer = curs.fetchone()
         conn.close()
         return answer
