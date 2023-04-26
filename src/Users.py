@@ -82,26 +82,26 @@ class Users(Sqlite3_Database):
                        status=obj_tuple[1],
                        referral_link=obj_tuple[2],
                        referral_boss_id=obj_tuple[3],
-                       referral_status_id=obj_tuple[5],
-                       firstname=obj_tuple[6],
-                       lastname=obj_tuple[7],
-                       patronymic=obj_tuple[8],
-                       document_id=obj_tuple[9],
-                       country_id=obj_tuple[10],
-                       registration_date=obj_tuple[11],
-                       full_registered=obj_tuple[12],
-                       username=obj_tuple[13],
-                       payment_method_id=obj_tuple[14],
-                       withdrawal_account=obj_tuple[15],
-                       balance=obj_tuple[16],
-                       earnings=obj_tuple[17],
-                       count_no_verified=obj_tuple[18],
-                       count_verified_paid=obj_tuple[19],
-                       count_verified_rejected=obj_tuple[20],
-                       flag=Flags(obj_tuple[21]),
-                       bot_message_id=obj_tuple[22],
-                       delete_message_id=obj_tuple[23],
-                       earnings_on_reff=obj_tuple[24]
+                       referral_status_id=obj_tuple[4],
+                       firstname=obj_tuple[5],
+                       lastname=obj_tuple[6],
+                       patronymic=obj_tuple[7],
+                       document_id=obj_tuple[8],
+                       country_id=obj_tuple[9],
+                       registration_date=obj_tuple[10],
+                       full_registered=obj_tuple[11],
+                       username=obj_tuple[12],
+                       payment_method_id=obj_tuple[13],
+                       withdrawal_account=obj_tuple[14],
+                       balance=obj_tuple[15],
+                       earnings=obj_tuple[16],
+                       count_no_verified=obj_tuple[17],
+                       count_verified_paid=obj_tuple[18],
+                       count_verified_rejected=obj_tuple[19],
+                       flag=Flags(obj_tuple[20]),
+                       bot_message_id=obj_tuple[21],
+                       delete_message_id=obj_tuple[22],
+                       earnings_on_reff=obj_tuple[23]
                        )
             return obj
         return False
@@ -117,10 +117,12 @@ class Users(Sqlite3_Database):
         else:
             return False
 
-    def get_referral_boss(self, id: int) -> int:
+    def get_referral_boss(self, id: int) -> str:
         conn = self.sqlite_connect()
         curs = conn.cursor()
         curs.execute(f'''SELECT username from {self.table_name} where id = {id}''')
         answer = curs.fetchone()
         conn.close()
+        if answer is None:
+            return "босса нет"
         return answer
