@@ -1,10 +1,11 @@
 import logging
-
+from Enum_classes import *
 from config import *
 from aiogram import types, executor
 from exceptions import *
 import keyboards as kb
 from functions import get_mess
+
 
 @dp.message_handler(commands=["admin"])
 async def start(message: types.Message):
@@ -19,7 +20,7 @@ async def start(message: types.Message):
         logging.info(str(admin))
         await bot.edit_message_text(chat_id=id,
                                     message_id=bot_message_id,
-                                    text=get_mess(path="about_by_admin"),
+                                    text=get_mess(path="templates/about_by_admin"),
                                     reply_markup=kb.admin_main_keyboard)
         logging.info("edit mes successful")
 
@@ -31,6 +32,24 @@ async def start(message: types.Message):
         admins.update_info(admin)
 
 
+@dp.message_handler(lambda message: message.from_user.id in admins)
+async def message_admin(message: types.Message):
+    id = message.from_user.id
+    admin = admins.get(id)
+    if admin.flag is Admin_flags.input_user_by_statictic:
+        if message.text.isdigit():
+            user_id = int(message.text)
+            user = users.get(user_id)
+        else:
+            username = message.text
+            user = users.get_by_username(username)
+
+        await bot.edit_message_text(chat_id=id,
+                                    message_id=admin.bot_message_id,
+                                    text="as",
+                                    reply_markup=kb.NONE)
+
+
 @dp.callback_query_handler(lambda call: call.from_user.id in admins)
 async def call_admin(call: types.CallbackQuery):
     id = call.from_user.id
@@ -38,8 +57,23 @@ async def call_admin(call: types.CallbackQuery):
     if call.data == "user":
         await bot.edit_message_text(chat_id=id,
                                     message_id=admin.bot_message_id,
-                                    text=get_mess("action_admin_user"),
+                                    text=get_mess("templates/action_admin_user"),
                                     reply_markup=kb.admin_users_keyboard)
+
+    elif call.data == "statistic":
+        await bot.edit_message_text(chat_id=id,
+                                    message_id=admin.bot_message_id,
+                                    text=get_mess("templates/about_statistic_by_admin"),
+                                    reply_markup=kb.admin_users_statistic_keyboard)
+
+    elif call.data == "one_user_statistic":
+        await bot.edit_message_text(chat_id=id,
+                                    message_id=admin.bot_message_id,
+                                    text=get_mess("templates/input_user_id"),
+                                    reply_markup=kb.admin_users_statistic_keyboard)
+        admin.flag = Admin_flags.input_user_by_statictic
+
+
 
     elif call.data == "change_balance":
         await bot.edit_message_text(chat_id=id,

@@ -34,7 +34,7 @@ create table users(
     registration_date integer,
     full_registered bool default FALSE,
     username nvarchar(25),
-    payment_method_id text,
+    payment_method_id integer, --change
     withdrawal_account text,
     balance integer default 0,
     earnings integer default 0,
@@ -94,3 +94,6 @@ create table tasks_users(
     foreign key(task_id) references tasks(id),
     foreign key(user_id) references users(id)
 );
+
+
+

@@ -1,26 +1,26 @@
 from dataclasses import dataclass
 from collections import namedtuple
 from SQLite import Sqlite3_Database
+from Enum_classes import Admin_flags
 
 
 @dataclass
 class Admin:
     def __init__(self, id, **kwargs):
+        self.id: int = id
         if len(kwargs):
-            self.id: int = id
             self.text_for_mailing: str = kwargs["text_for_mailing"]
             self.name_button_for_mailing: str = kwargs["name_button_for_mailing"]
             self.link_button_for_mailing: str = kwargs["link_button_for_mailing"]
-            self.flag: int = kwargs["flag"]  # change
+            self.flag: Admin_flags = Admin_flags(kwargs["flag"])
             self.bot_message_id: int = kwargs["bot_message_id"]
             self.delete_message_id: int = kwargs["delete_message_id"]
 
         else:
-            self.id: int = id
             self.text_for_mailing: str = ""
             self.name_button_for_mailing: str = ""
             self.link_button_for_mailing: str = ""
-            self.flag: int = 0
+            self.flag: Admin_flags = Admin_flags.NONE
             self.bot_message_id: int = 0
             self.delete_message_id: int = 0
 
@@ -30,7 +30,7 @@ class Admin:
             self.text_for_mailing,
             self.name_button_for_mailing,
             self.link_button_for_mailing,
-            self.flag,
+            self.flag.value,
             self.bot_message_id,
             self.delete_message_id,
         )
@@ -45,15 +45,19 @@ class Admin:
         Result = namedtuple("Result", ["name", "value"])
         for attr in dict_class:
             if not attr.startswith("__"):
-                yield Result(attr, dict_class[attr])
+                if attr != "flag":
+                    yield Result(attr, dict_class[attr])
+                else:
+                    yield Result(attr, dict_class[attr].value)
 
 
 class Admins(Sqlite3_Database):
     def __init__(self, db_file_name, table_name, *args) -> None:
         Sqlite3_Database.__init__(self, db_file_name, table_name, *args)
+        self.len = 0
 
     def add(self, obj: Admin) -> None:
-        self.add_row(obj.get_tuple())
+        self.add_row(obj)
 
     def get(self, id: int) -> Admin | bool:
         if id in self:

@@ -111,20 +111,20 @@ class Sqlite3_Database:
     #         curs.execute(f"""ALTER TABLE {self.table_name} ADD COLUMN {col_name} '{columns[col_name]}'""")
     #     conn.close()
 
-    def add_row(self, values: tuple) -> None:
+    def add_row(self, obj) -> None:
         conn = self.sqlite_connect()
         curs = conn.cursor()
         insert_vals_str = ''
-        for i in range(len(values)):
-            insert_vals_str += '?'
-            if len(values) - 1 != i:
-                insert_vals_str += ', '
-        # print(f"""INSERT INTO {self.table_name} VALUES ({insert_vals_str})\n""", values)
+        values = list()
+        for i in obj:
+            values.append(i.value)
+            insert_vals_str += "?,"
+        insert_vals_str = insert_vals_str[:-1]
         curs.execute(f"""INSERT INTO {self.table_name} VALUES ({insert_vals_str})""", values)
         conn.commit()
         conn.close()
 
-    def del_row(self, id: int | str) -> None:
+    def del_instance(self, id: int | str) -> None:
         conn = self.sqlite_connect()
         curs = conn.cursor()
         if id.__class__.__name__ == "int":
