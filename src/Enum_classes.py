@@ -7,7 +7,7 @@ class Flags(Enum):
 
 class Admin_flags(Enum):
     NONE = 0
-    input_user_by_statictic = 1
+    input_user_by_statistic = 1
 
 
 class Reminder(Enum):

@@ -41,6 +41,7 @@ admin_change_balance_name_button = {
     "Уменьшить": "decrease"
 }
 
+
 admin_back_to_choice_statistic = create_keyboard({"Назад": "statistic"})
 admin_main_keyboard = create_keyboard(admin_main_name_button)
 admin_users_keyboard = create_keyboard(admin_users_name_button)

@@ -1,5 +1,6 @@
 from aiogram import types
 from jinja2 import Environment, PackageLoader, select_autoescape
+from config import users, documents, countries
 
 
 def create_keyboard(name_buttons: list, ) -> types.ReplyKeyboardMarkup:
@@ -41,8 +42,41 @@ def get_mess(path: str, **kwargs):
     tmpl = env.get_template(path)
     return tmpl.render(kwargs)
 
+
+def get_statistic_profile(id: int | str):
+    if id.isdigit():
+        id = int(id)
+        user = users.get(id)
+    else:
+        user = users.get_by_username(id)
+    if user:
+        country = countries.get(user.country_id).name
+        document = documents.get(user.country_id).name
+        referral_boss = users.get_referral_boss(user.referral_boss_id)
+        if referral_boss is None:
+            referral_boss = "босса нет"
+        mess = get_mess(path="templates/profile_user", lastname=user.lastname, firstname=user.firstname,
+                        patronymic=user.patronymic, id=user.id, username=user.username, counrty=country,
+                        document=document, withdrawal_account=user.withdrawal_account, balance=user.balance,
+                        referral_link=user.referral_link, referral_boss=referral_boss)
+        return mess
+
+
+def get_full_statistic():
+    count_user = len(users)
+    count_user_today = 0
+    count_user_week = 0
+    count_user_month = 0
+    count_not_verified_task = 0
+    count_confirmed_task = 0
+    count_rejected_task = 0
+    current_balance = 0
+    total_earnings = 0
+    balance_withdrawn = 0
+
+
 if __name__ == "__main__":
     s = get_mess("templates/profile_user", firstname="s", patronymic="v", id=0,
-                 username="sas", lastname="sa", counrty="sa", document="sasc", withdrawal_account= "as",
+                 username="sas", lastname="sa", counrty="sa", document="sasc", withdrawal_account="as",
                  balance=100)
     print(s)

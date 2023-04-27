@@ -71,9 +71,18 @@ class User:
 class Users(Sqlite3_Database):
     def __init__(self, db_file_name, table_name, *args) -> None:
         Sqlite3_Database.__init__(self, db_file_name, table_name, *args)
+        self.len = self.get_keys()
 
     def add(self, obj: User) -> None:
         self.add_row(obj)
+        self.len += 1
+
+    def __len__(self):
+        return self.len
+
+    def __delitem__(self, key):
+        self.del_instance(key)
+        self.len -= 1
 
     def get(self, id: int) -> User | bool:
         if id in self:
@@ -106,23 +115,14 @@ class Users(Sqlite3_Database):
             return obj
         return False
 
-    def get_by_username(self, username) -> User | bool:
-        conn = self.sqlite_connect()
-        curs = conn.cursor()
-        curs.execute(f'''SELECT * from {self.table_name} where username = "{username}"''')
-        answer = curs.fetchone()
-        conn.close()
-        if answer:
-            return answer
-        else:
-            return False
-
-    def get_referral_boss(self, id: int) -> str:
-        conn = self.sqlite_connect()
-        curs = conn.cursor()
-        curs.execute(f'''SELECT username from {self.table_name} where id = {id}''')
-        answer = curs.fetchone()
-        conn.close()
-        if answer is None:
-            return "босса нет"
+    def get_by_username(self, username: str) -> str | None:
+        answer = self.get_by_other_field(field="username", value=username, username="username")
         return answer
+
+    def get_referral_boss(self, id: int) -> str | None:
+        answer = self.get_by_other_field(field="id", value=id, username="username")
+        return answer
+
+
+
+

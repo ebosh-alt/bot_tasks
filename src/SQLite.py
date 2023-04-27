@@ -1,6 +1,7 @@
 import sqlite3
 from pathlib import Path
 
+
 class Sqlite3_Database:
     def __init__(self, db_file_name: str, table_name: str, *args: dict) -> None:
         self.table_name = table_name
@@ -127,6 +128,7 @@ class Sqlite3_Database:
     def del_instance(self, id: int | str) -> None:
         conn = self.sqlite_connect()
         curs = conn.cursor()
+
         if id.__class__.__name__ == "int":
             curs.execute(f"""DELETE FROM {self.table_name} WHERE id = {id}""")
         else:
@@ -147,9 +149,22 @@ class Sqlite3_Database:
     def get_keys(self) -> list:
         conn = self.sqlite_connect()
         curs = conn.cursor()
-        curs.execute(f"""SELECT key FROM {self.table_name}""")
+        curs.execute(f"""SELECT id FROM {self.table_name}""")
         grand_tuple = curs.fetchall()
         conn.commit()
         conn.close()
         keys = [key[0] for key in grand_tuple]
         return keys
+
+    def get_by_other_field(self, value: int | str, field: str, **kwargs) -> str:
+        conn = self.sqlite_connect()
+        curs = conn.cursor()
+        if value.__class__.__name__ == "int":
+            curs.execute(f'''SELECT {" ,".join(kwargs.keys())} from {self.table_name} where {field} = {value}''')
+        else:
+            curs.execute(f'''SELECT {" ,".join(kwargs.keys())} from {self.table_name} where {field} = "{value}"''')
+
+        answer = curs.fetchone()
+        conn.close()
+
+        return answer

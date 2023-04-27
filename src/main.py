@@ -1,10 +1,9 @@
-import logging
 from Enum_classes import *
 from config import *
 from aiogram import types, executor
 from exceptions import *
 import keyboards as kb
-from functions import get_mess
+from functions import get_mess, get_statistic_profile
 
 
 @dp.message_handler(commands=["start"])
@@ -47,25 +46,12 @@ async def message_admin(message: types.Message):
     logging.info(f"admin message.text: {message.text}\nadmin.flag: {admin.flag.name}")
     await bot.delete_message(chat_id=id,
                              message_id=message.message_id)
-    if admin.flag is Admin_flags.input_user_by_statictic:
-        if message.text.isdigit():
-            user_id = int(message.text)
-            user = users.get(user_id)
-        else:
-            username = message.text
-            user = users.get_by_username(username)
-        if user:
-            country = countries.get(user.country_id).name
-            document = documents.get(user.country_id).name
-            referral_boss = users.get_referral_boss(user.referral_boss_id)
-            mess = get_mess(path="templates/profile_user", lastname=user.lastname, firstname=user.firstname,
-                            patronymic=user.patronymic, id=user.id, username=user.username,  counrty=country,
-                            document=document, withdrawal_account=user.withdrawal_account, balance=user.balance,
-                            referral_link=user.referral_link, referral_boss=referral_boss)
-            await bot.edit_message_text(chat_id=id,
-                                        message_id=admin.bot_message_id,
-                                        text=mess,
-                                        reply_markup=kb.NONE)
+    if admin.flag is Admin_flags.input_user_by_statistic:
+        mess = get_statistic_profile(message.text)
+        await bot.edit_message_text(chat_id=id,
+                                    message_id=admin.bot_message_id,
+                                    text=mess,
+                                    reply_markup=kb.admin_back_to_choice_statistic)
 
 
 @dp.callback_query_handler(lambda call: call.from_user.id in admins)
@@ -96,8 +82,8 @@ async def call_admin(call: types.CallbackQuery):
         await bot.edit_message_text(chat_id=id,
                                     message_id=admin.bot_message_id,
                                     text=get_mess("templates/input_user_id"),
-                                    reply_markup=kb.admin_back_to_choice_statistic) #add button back
-        admin.flag = Admin_flags.input_user_by_statictic
+                                    reply_markup=kb.admin_back_to_choice_statistic)
+        admin.flag = Admin_flags.input_user_by_statistic
 
 
 
