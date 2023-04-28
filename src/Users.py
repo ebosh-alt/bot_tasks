@@ -1,23 +1,25 @@
+import datetime
 from collections import namedtuple
 
 from SQLite import Sqlite3_Database
-from Enum_classes import Flags, Reminder
+from Enum_classes import Flags
 
 
 class User:
     def __init__(self, id, **kwargs):
+        """id: int status: bool referral_link: str referral_boss_id: int referral_status_id: int firstname: str lastname: str patronymic: str document_id: int country_id: int registration_date: int full_registered: bool username: str payment_method_id: int withdrawal_account: str balance: int earnings: int count_no_verified: int count_verified_paid: int count_verified_rejected: int flag: int bot_message_id: int delete_message_id: int earnings_on_reff: int """
         self.id: int = id
         if len(kwargs):
             self.status: bool = kwargs["status"]
             self.referral_link: str = kwargs["referral_link"]
             self.referral_boss_id: int = kwargs["referral_boss_id"]
             self.referral_status_id: int = kwargs["referral_status_id"]
+            self.registration_date: float = kwargs["registration_date"]
             self.firstname: str = kwargs["firstname"]
             self.lastname: str = kwargs["lastname"]
             self.patronymic: str = kwargs["patronymic"]
             self.document_id: int = kwargs["document_id"]
             self.country_id: int = kwargs["country_id"]
-            self.registration_date: int = kwargs["registration_date"]
             self.full_registered: bool = kwargs["full_registered"]
             self.username: str = kwargs["username"]
             self.payment_method_id: str = kwargs["payment_method_id"]
@@ -123,6 +125,20 @@ class Users(Sqlite3_Database):
         answer = self.get_by_other_field(field="id", value=id, username="username")
         return answer
 
+    def get_all_balance(self):
+        balance = self.get_attribute(attr="balance")
+        return sum(balance)
 
+    def get_total_earnings(self):
+        total_earnings = self.get_attribute(attr="earnings")
+        return sum(total_earnings)
 
+    def get_users_by_time(self, time: int):
+        ts = (datetime.datetime.utcnow() - datetime.timedelta(hours=time)).timestamp().__float__()
+        conn = self.sqlite_connect()
+        curs = conn.cursor()
+        curs.execute(f'''SELECT id from {self.table_name} where registration_date >= {ts}''')
+        answer = curs.fetchall()
+        conn.close()
 
+        return len(answer)

@@ -4,13 +4,14 @@ from aiogram import types, executor
 from exceptions import *
 import keyboards as kb
 from functions import get_mess, get_statistic_profile
+from datetime import datetime
 
 
 @dp.message_handler(commands=["start"])
 async def start_admin(message: types.Message):
     id = message.from_user.id
     if id not in users:
-        users.add(User(id))
+        users.add(User(id, registration_date=datetime.utcnow().timestamp()))
         await bot.send_message(chat_id=id,
                                text="hello world!")
 

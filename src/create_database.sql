@@ -31,7 +31,7 @@ create table users(
     patronymic nvarchar(25),
     document_id integer,
     country_id integer,
-    registration_date integer,
+    registration_date decimal,
     full_registered bool default FALSE,
     username nvarchar(25),
     payment_method_id integer, --change
@@ -92,8 +92,10 @@ create table tasks_users(
     user_id integer,
     task_id integer,
     completion_date integer,
+    status bool default NULL,
     foreign key(task_id) references tasks(id),
     foreign key(user_id) references users(id)
 );
 
 drop table users;
+drop table tasks_users;

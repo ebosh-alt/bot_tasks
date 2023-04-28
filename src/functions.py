@@ -64,15 +64,15 @@ def get_statistic_profile(id: int | str):
 
 def get_full_statistic():
     count_user = len(users)
-    count_user_today = 0
-    count_user_week = 0
-    count_user_month = 0
+    count_user_today = users.get_users_by_time(time=24)
+    count_user_week = users.get_users_by_time(time=168)
+    count_user_month = users.get_users_by_time(time=720)
     count_not_verified_task = 0
     count_confirmed_task = 0
     count_rejected_task = 0
-    current_balance = 0
-    total_earnings = 0
-    balance_withdrawn = 0
+    current_balance = users.get_all_balance()
+    total_earnings = users.get_total_earnings()
+    balance_withdrawn = total_earnings - current_balance
 
 
 if __name__ == "__main__":

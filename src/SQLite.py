@@ -156,6 +156,16 @@ class Sqlite3_Database:
         keys = [key[0] for key in grand_tuple]
         return keys
 
+    def get_attribute(self, attr: str):
+        conn = self.sqlite_connect()
+        curs = conn.cursor()
+        curs.execute(f"""SELECT {attr} FROM {self.table_name}""")
+        grand_tuple = curs.fetchall()
+        conn.commit()
+        conn.close()
+        answer = [el[0] for el in grand_tuple]
+        return answer
+
     def get_by_other_field(self, value: int | str, field: str, **kwargs) -> str:
         conn = self.sqlite_connect()
         curs = conn.cursor()
